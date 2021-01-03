@@ -1,2 +1,3 @@
 Implementare un test di cross-validation
 Mettere train e test e valutazione in un'unica funzione train and evaluate model
+Cercare di parallelizzare la lettura delle immagini se è possibile 
