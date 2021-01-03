@@ -1,0 +1,2 @@
+Implementare un test di cross-validation
+Mettere train e test e valutazione in un'unica funzione train and evaluate model
