@@ -245,8 +245,9 @@ import os
 
 """ Getting image path to open the image
 """
+
+# BISOGNA MODIFICARE QUESTO PATH PER RICAVARE IL CORRETTO PATH DELL'IMMAGINE
 image_path = r"C:\Users\feder\Desktop\Computational Methods for Experimental Physics and Data Analysis\cmepda_medphys\L4_code\0039t1_2_1_1.pgm"
-# image_path = r"C:\Users\feder\Desktop\Computational Methods for Experimental Physics and Data Analysis\IMAGES\Mammography_micro\Train\1\0093t1_1_1_1.pgm_5.pgm"
 
 for i, wavelet_type in enumerate(['haar', 'sym2', 'sym3', 'db2', 'db3']):
     # Here I do the magic with pywavelets
