@@ -193,14 +193,14 @@ def fivelvldecomp(im_path, wavelet):
     return myim, mynewim
 
 
-def savecomparison(myim, mynewim, save_path, name_of_image):
+def savecomparison(myim, mynewim, save_path, title_of_image, name_of_image):
     """ This function saves an image showing the comparison between the original image and the
         reconstructed one in which details are highly enhanced.
     """
 
     dpi = 96
 
-    plt.figure('Comparison', figsize=(1200/dpi, 600/dpi), dpi=dpi)
+    plt.figure(figsize=(1200/dpi, 600/dpi), dpi=dpi)
     plt.subplot(1,2,1)
     plt.title("Normale")
     plt.imshow(myim, cmap='gray')
@@ -216,7 +216,7 @@ def savecomparison(myim, mynewim, save_path, name_of_image):
     plt.colorbar(orientation='horizontal')
 
     plt.subplot(1,2,2)
-    plt.title("Modificata")
+    plt.title(title_of_image)
     plt.imshow(mynewim, cmap='gray')
     plt.tick_params(
         axis='both',
@@ -248,10 +248,44 @@ import os
 image_path = r"C:\Users\feder\Desktop\Computational Methods for Experimental Physics and Data Analysis\cmepda_medphys\L4_code\0039t1_2_1_1.pgm"
 # image_path = r"C:\Users\feder\Desktop\Computational Methods for Experimental Physics and Data Analysis\IMAGES\Mammography_micro\Train\1\0093t1_1_1_1.pgm_5.pgm"
 
-# Here I do the magic with pywavelets
-myim, mynewim = threelvldecomp(image_path, 'sym3')
+for i, wavelet_type in enumerate(['haar', 'sym2', 'sym3', 'db2', 'db3']):
+    # Here I do the magic with pywavelets
+    myim, mynewim = threelvldecomp(image_path, wavelet_type)
 
-# Choose the path to which the image will be saved
-save_path = r"C:\Users\feder\Desktop"
-image_name = "prova.png"
-savecomparison(myim, mynewim, save_path, image_name)
+    # The image will be saved in a the 'Comparison' folder on the Desktop of the User
+    save_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', 'Comparisons')
+
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+
+    image_name = f"threelevelswith{wavelet_type}.png"
+    image_title = f"Altered with {wavelet_type}-3lvls"
+    savecomparison(myim, mynewim, save_path, image_title, image_name)
+
+for i, wavelet_type in enumerate(['haar', 'sym2', 'sym3', 'db2', 'db3']):
+    # Here I do the magic with pywavelets
+    myim, mynewim = fourlvldecomp(image_path, wavelet_type)
+
+    # The image will be saved in a the 'Comparison' folder on the Desktop of the User
+    save_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', 'Comparisons')
+
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+
+    image_name = f"fourlevelswith{wavelet_type}.png"
+    image_title = f"Altered with {wavelet_type}-4lvls"
+    savecomparison(myim, mynewim, save_path, image_title, image_name)
+
+for i, wavelet_type in enumerate(['haar', 'sym2', 'sym3', 'db2', 'db3']):
+    # Here I do the magic with pywavelets
+    myim, mynewim = fivelvldecomp(image_path, wavelet_type)
+
+    # The image will be saved in a the 'Comparison' folder on the Desktop of the User
+    save_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', 'Comparisons')
+
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+
+    image_name = f"fivelevelswith{wavelet_type}.png"
+    image_title = f"Altered with {wavelet_type}-5lvls"
+    savecomparison(myim, mynewim, save_path, image_title, image_name)
