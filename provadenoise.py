@@ -13,7 +13,6 @@ def threelvldecomp(myim, wavelet):
     """
 
     level = 3
-    mode = 'periodization' 
 
     cA, (cH3, cV3, cD3), (cH2, cV2, cD2), (cH1, cV1, cD1) = pywt.wavedec2(myim, wavelet, level=level) # Here I get my approximated image and the relative coefficients
 
@@ -61,7 +60,7 @@ def threelvldecomp(myim, wavelet):
 
     return myim, mynewim
 
-image_path = r"C:\Users\feder\Desktop\miafoto.jpg"
+image_path = r"C:\Users\feder\Desktop\Computational Methods for Experimental Physics and Data Analysis\IMAGES\Mammography_micro\Train\0\0002s1_2_0.pgm_1.pgm"
 myim = Image.open(image_path)
 myimfl = img_as_float(myim)
 
