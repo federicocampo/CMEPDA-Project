@@ -3,6 +3,10 @@ def convert_to_pgm(fname, dest_folder):
       .pgm images. This is done to easen the
       reading process for the CNN and to make
       it more universal.
+
+      Parameters:
+      - fname = name of the image to convert
+      - dest_folder = folder path to which the image will be saved
   '''
 
   ''' If the desired folder to which save the new

@@ -1,6 +1,13 @@
 def dwtcoefftoarray(myim, wavelet, level, denoise):
     ''' This function collects all the coefficients of the DWT and converts them
         in a flat array which can be passed to the Deep Neural Network.
+    
+        Parameters:
+        - myim = image opened with PIL.Image
+        - wavelet = which wavelet to use
+        - level = level of the wavelet decomposition
+        - denoise = wheter to prior denoise the image or not, denoise
+                    should be set to "yes" or "no"  
     '''
     if denoise == 'yes':
         myimfl = img_as_float(myim)
@@ -20,6 +27,13 @@ def dwtanalysis(myim, wavelet, level, denoise):
         the DWT are then masked keeping only those values which are greater than
         the standard deviation calculated over the matrix values. The image is then
         reconstructed using the new coefficients. 
+
+        Parameters:
+        - myim = image opened with PIL.Image
+        - wavelet = which wavelet to use
+        - level = level of the wavelet decomposition
+        - denoise = wheter to prior denoise the image or not, denoise
+                    should be set to "yes" or "no" 
     '''
     if denoise == 'yes':
         myimfl = img_as_float(myim)
@@ -117,8 +131,14 @@ def dwtanalysis(myim, wavelet, level, denoise):
 def savecomparison(myim, mynewim, save_path, title_of_image, name_of_image):
     ''' This function saves an image showing the comparison between the original image and the
         reconstructed one in which details are highly enhanced.
+    
+    Parameters:
+        - myim = the original image opened with PIL.Image
+        - mynewim = the image obtained with the DWT analysis
+        - save_path = path to which the image will be saved
+        - title_of_image = title of the comparison image
+        - name_of_image = name with which the image will be saved 
     '''
-
     dpi = 96
 
     plt.figure(figsize=(1200/dpi, 600/dpi), dpi=dpi)
