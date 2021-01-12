@@ -1,7 +1,7 @@
 def dwtcoefftoarray(myim, wavelet, level, denoise):
-    """ This function collects all the coefficients of the DWT and converts them
+    ''' This function collects all the coefficients of the DWT and converts them
         in a flat array which can be passed to the Deep Neural Network.
-    """
+    '''
     if denoise == 'yes':
         myimfl = img_as_float(myim)
         myim = denoise_wavelet(myimfl, method='BayesShrink', mode='soft', rescale_sigma='True')
@@ -14,12 +14,13 @@ def dwtcoefftoarray(myim, wavelet, level, denoise):
 
 
 def dwtanalysis(myim, wavelet, level, denoise):
-    """ This function decomposes the original image with a Discrete Wavelet Transformation
-        using the desired wavelet family up to the fifth level. It keeps all the details
-        coefficients and mask the resulted approximated image in order to enhance the
-        visibility of all the details. One can choose to denoise the original image
-        prior to the DWT decomposition and reconstruction.
-    """
+    ''' This function decomposes the original image with a Discrete Wavelet Transformation
+        using the desired wavelet family up to the fifth level. One can choose to denoise 
+        the original image prior to the DWT decomposition. The coefficients matrices obtained from 
+        the DWT are then masked keeping only those values which are greater than
+        the standard deviation calculated over the matrix values. The image is then
+        reconstructed using the new coefficients. 
+    '''
     if denoise == 'yes':
         myimfl = img_as_float(myim)
         myim = denoise_wavelet(myimfl, method='BayesShrink', mode='soft', rescale_sigma='True')
@@ -37,11 +38,11 @@ def dwtanalysis(myim, wavelet, level, denoise):
     else:
         pass
 
-    """ Now, I get the standard deviation for each matrix (image and coefficients).
+    ''' Now, I get the standard deviation for each matrix (image and coefficients).
         The std will act as a treshold so that if abs(value) < 0. --> value = 0.
-                                            elif abs(value) > 0. --> value = value
-    """
-    ncA = np.zeros_like(cA)
+                                               elif abs(value) > 0. --> value = value
+    '''
+    ncA = np.zeros_like(cA) # I won't need the approximated image anymore, I only need to modify the n'th level coefficient.
 
     std10 = np.std(cH1)
     std11 = np.std(cV1)
@@ -92,10 +93,10 @@ def dwtanalysis(myim, wavelet, level, denoise):
     else:
         pass
 
-    """ To let things be more readable I define new_coeff,
+    ''' To let things be more readable I define new_coeff,
         this is just so that waverec2 (the function needed to reconstruct
         the image from a set of given coefficient) can do what it does.
-    """
+    '''
     if level == 2:
         new_coeff = ncA, (ncH2, ncV2, ncD2), (ncH1, ncV1, ncD1) 
     elif level == 3:
@@ -105,6 +106,8 @@ def dwtanalysis(myim, wavelet, level, denoise):
     elif level == 5:
         new_coeff = ncA, (ncH5, ncV5, ncD5), (ncH4, ncV4, ncD4), (ncH3, ncV3, ncD3), (ncH2, ncV2, ncD2), (ncH1, ncV1, ncD1) 
 
+    ''' Here the image is reconstructed using the new coefficients.
+    '''
     mynewim = pywt.waverec2(new_coeff, wavelet)
     mynewim = pywt.threshold(mynewim, 0., mode = 'greater', substitute = 0.)
 
@@ -112,9 +115,9 @@ def dwtanalysis(myim, wavelet, level, denoise):
 
 
 def savecomparison(myim, mynewim, save_path, title_of_image, name_of_image):
-    """ This function saves an image showing the comparison between the original image and the
+    ''' This function saves an image showing the comparison between the original image and the
         reconstructed one in which details are highly enhanced.
-    """
+    '''
 
     dpi = 96
 
@@ -161,28 +164,42 @@ import numpy as np
 import os
 import glob
 
-level = 4
+''' Choose the desidered decomposition level.
+    Choose wheter to denoise the image or not.
+'''
+level = 3
 denoise = 'no'
 
-""" Getting image path to open the image
-"""
+''' Getting images folder path to open the image
+'''
 general_path = r"C:\Users\feder\Desktop\Computational Methods for Experimental Physics and Data Analysis\IMAGES\Mammography_micro"
 
+''' Starting from the general_path folder, which contains 0 and 1 folders, 
+    these loops cycle every image contained in these folders in order to process
+    them with the dwtanalysis() function. Then the images are saved in the desired folder.
+'''
 for k, folder in enumerate(['Train', 'Test']):
+    ''' 0 folder's images are those without microcalcifications.
+        1 folder's images are those containing microcalcifications.
+    '''
     zero_images_path = os. path.join(general_path, folder, '0')
     one_images_path = os. path.join(general_path, folder, '1')
 
+    # Here I retrieve all the images in the .pgm format.
     zero_images_names = glob.glob(os.path.join(zero_images_path, '*.pgm'))
     one_images_names = glob.glob(os.path.join(one_images_path, '*.pgm'))
 
-    save_folder = f'{folder}_png'
-
-    for j, wavelet_type in enumerate(['db5']):
+    for j, wavelet_type in enumerate(['db2', 'sym2']): # Here you can choose which wavelets to use to analyze the images.
         for i, image_path in enumerate(zero_images_names):
             im = Image.open(image_path)
             myim, mynewim = dwtanalysis(im, wavelet_type, level=level, denoise=denoise)
 
-            save_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', f'{wavelet_type}_{level}levels_{denoise}denoise', save_folder, '0')
+            ''' For Windows users: Choose the path to which the 0 label images will be saved.
+                Default: The images are saved on the Desktop in a folder which name describes
+                the wavelet used, the decomposition level and if a denoise process has been applied.
+                In this folder a "0" folder is created, containing all the new images.
+            '''
+            save_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', f'{wavelet_type}_{level}levels_{denoise}denoise', f'{folder}_png, '0')
             if not os.path.exists(save_path):
                 os.makedirs(save_path)
             final_path = os.path.join(save_path, f'{i}.png')
@@ -195,7 +212,12 @@ for k, folder in enumerate(['Train', 'Test']):
             im = Image.open(image_path)
             myim, mynewim = dwtanalysis(im, wavelet_type, level=level, denoise=denoise)
 
-            save_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', f'{wavelet_type}_{level}levels_{denoise}denoise', save_folder, '1')
+            ''' For Windows users: Choose the path to which the 1 label images will be saved.
+                Default: The images are saved on the Desktop in a folder which name describes
+                the wavelet used, the decomposition level and if a denoise process has been applied.
+                In this folder a "1" folder is created, containing all the new images.
+            '''
+            save_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', f'{wavelet_type}_{level}levels_{denoise}denoise', f'{folder}_png, '1')
             if not os.path.exists(save_path):
                 os.makedirs(save_path)
             final_path = os.path.join(save_path, f'{i}.png')
