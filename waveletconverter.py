@@ -1,8 +1,24 @@
+def dwtcoefftoarray(myim, wavelet, level, denoise):
+    """ This function collects all the coefficients of the DWT and converts them
+        in a flat array which can be passed to the Deep Neural Network.
+    """
+    if denoise == 'yes':
+        myimfl = img_as_float(myim)
+        myim = denoise_wavelet(myimfl, method='BayesShrink', mode='soft', rescale_sigma='True')
+    elif denoise == 'no':
+        pass
+
+    coeffs = pywt.wavedec2(myim, wavelet, level=level)
+    coeffsarray = pywt.ravel_coeffs(coeffs)
+    return coeffsarray
+
+
 def dwtanalysis(myim, wavelet, level, denoise):
-    """ This function decompose the original image with a Discrete Wavelet Transformation
+    """ This function decomposes the original image with a Discrete Wavelet Transformation
         using the desired wavelet family up to the fifth level. It keeps all the details
-        coefficient and mask the resulted approximated image in order to enhance the
-        visibility of all the details.
+        coefficients and mask the resulted approximated image in order to enhance the
+        visibility of all the details. One can choose to denoise the original image
+        prior to the DWT decomposition and reconstruction.
     """
     if denoise == 'yes':
         myimfl = img_as_float(myim)
@@ -145,26 +161,45 @@ import numpy as np
 import os
 import glob
 
+level = 4
+denoise = 'no'
+
 """ Getting image path to open the image
 """
-# BISOGNA MODIFICARE QUESTO PATH PER RICAVARE IL CORRETTO PATH DELL'IMMAGINE
-images_path = r"C:\Users\feder\Desktop\Computational Methods for Experimental Physics and Data Analysis\IMAGES\Mammography_micro\Train\0"
-images_names = glob.glob(os.path.join(images_path, '*.pgm'))
+general_path = r"C:\Users\feder\Desktop\Computational Methods for Experimental Physics and Data Analysis\IMAGES\Mammography_micro"
 
-for i, image in enumerate(images_names):
-    # Here I do the magic with pywavelets
-    wavelet_type = 'db5'
-    level = 4
-    denoise = 'yes'
+for k, folder in enumerate(['Train', 'Test']):
+    zero_images_path = os. path.join(general_path, folder, '0')
+    one_images_path = os. path.join(general_path, folder, '1')
 
-    im = Image.open(image)
-    myim, mynewim = dwtanalysis(im, wavelet_type, level=level, denoise=denoise)
+    zero_images_names = glob.glob(os.path.join(zero_images_path, '*.pgm'))
+    one_images_names = glob.glob(os.path.join(one_images_path, '*.pgm'))
 
-    save_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', f'0_{wavelet_type}_{level}levels_{denoise}denoise')
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-    final_path = os.path.join(save_path, f'{i}.png')
+    save_folder = f'{folder}_png'
 
-    mynewim = mynewim.astype(np.uint8)
-    mynewim = Image.fromarray(mynewim)
-    mynewim.save(final_path)
+    for j, wavelet_type in enumerate(['db5']):
+        for i, image_path in enumerate(zero_images_names):
+            im = Image.open(image_path)
+            myim, mynewim = dwtanalysis(im, wavelet_type, level=level, denoise=denoise)
+
+            save_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', f'{wavelet_type}_{level}levels_{denoise}denoise', save_folder, '0')
+            if not os.path.exists(save_path):
+                os.makedirs(save_path)
+            final_path = os.path.join(save_path, f'{i}.png')
+
+            mynewim = mynewim.astype(np.uint8)
+            mynewim = Image.fromarray(mynewim)
+            mynewim.save(final_path)
+
+        for i, image_path in enumerate(one_images_names):
+            im = Image.open(image_path)
+            myim, mynewim = dwtanalysis(im, wavelet_type, level=level, denoise=denoise)
+
+            save_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', f'{wavelet_type}_{level}levels_{denoise}denoise', save_folder, '1')
+            if not os.path.exists(save_path):
+                os.makedirs(save_path)
+            final_path = os.path.join(save_path, f'{i}.png')
+
+            mynewim = mynewim.astype(np.uint8)
+            mynewim = Image.fromarray(mynewim)
+            mynewim.save(final_path)
