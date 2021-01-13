@@ -219,7 +219,7 @@ for k, folder in enumerate(['Train', 'Test']):
                 the wavelet used, the decomposition level and if a denoise process has been applied.
                 In this folder a "0" folder is created, containing all the new images.
             '''
-            save_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', f'{wavelet_type}_{level}levels_{denoise}denoise', f'{folder}_png, '0')
+            save_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', f'{wavelet_type}_{level}levels_{denoise}denoise', f'{folder}_png', '0')
             if not os.path.exists(save_path):
                 os.makedirs(save_path)
             final_path = os.path.join(save_path, f'{i}.png')
@@ -237,7 +237,7 @@ for k, folder in enumerate(['Train', 'Test']):
                 the wavelet used, the decomposition level and if a denoise process has been applied.
                 In this folder a "1" folder is created, containing all the new images.
             '''
-            save_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', f'{wavelet_type}_{level}levels_{denoise}denoise', f'{folder}_png, '1')
+            save_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', f'{wavelet_type}_{level}levels_{denoise}denoise', f'{folder}_png', '1')
             if not os.path.exists(save_path):
                 os.makedirs(save_path)
             final_path = os.path.join(save_path, f'{i}.png')
