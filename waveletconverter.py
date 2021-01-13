@@ -1,4 +1,4 @@
-def dwtcoefftoarray(myim, wavelet, level, denoise):
+def dwtcoefftoarray(myim, wavelet, level, denoise, partial=False):
     ''' This function collects all the coefficients of the DWT and converts them
         in a flat array which can be passed to the Deep Neural Network.
     
@@ -7,7 +7,10 @@ def dwtcoefftoarray(myim, wavelet, level, denoise):
         - wavelet = which wavelet to use
         - level = level of the wavelet decomposition
         - denoise = wheter to prior denoise the image or not, denoise
-                    should be set to "yes" or "no"  
+                    should be set to "yes" or "no"
+        - partial = True or False <-- let's you choose wheter to take only the
+                    second and third levels coeffiecients if level is 3, or the
+                    second, third and fourth levels coefficients if level is 4
     '''
     if denoise == 'yes':
         myimfl = img_as_float(myim)
@@ -16,8 +19,34 @@ def dwtcoefftoarray(myim, wavelet, level, denoise):
         pass
 
     coeffs = pywt.wavedec2(myim, wavelet, level=level)
-    coeffsarray = pywt.ravel_coeffs(coeffs)
-    return coeffsarray[0]
+
+    infocoeffs = pywt.ravel_coeffs(coeffs)
+
+    if partial == False:
+        ''' If partial is False I want to take all the coefficients obtained from the wavedec2 decomposition 
+        '''
+        coeffsarray = infocoeffs[0]
+
+    if partial == True:
+        ''' If partial is True AND level is 3 I want to take the coefficients of 2nd and 3rd levels without the 1st level ones
+            and without those related to the approximated image.
+            If partial is True AND level is 4 I want to take the coefficients of 2nd, 3rd and 4th levels without the 1st level ones
+            and without those related to the approximated image.
+        '''
+        secondlevelcoeffs = np.concatenate(( infocoeffs[0][infocoeffs[1][-2]['da']], infocoeffs[0][infocoeffs[1][-2]['ad']], 
+                                            infocoeffs[0][infocoeffs[1][-2]['dd']] ))
+        thirdlevelcoeffs = np.concatenate(( infocoeffs[0][infocoeffs[1][-3]['da']], infocoeffs[0][infocoeffs[1][-3]['ad']], 
+                                            infocoeffs[0][infocoeffs[1][-3]['dd']] ))
+        if level == 3:    
+            coeffsarray = np.concatenate((secondlevelcoeffs, thirdlevelcoeffs))
+        elif level == 4:
+            fourthlevelcoeffs = np.concatenate(( infocoeffs[0][infocoeffs[1][-4]['da']], infocoeffs[0][infocoeffs[1][-4]['ad']], 
+                                                infocoeffs[0][infocoeffs[1][-4]['dd']] ))
+            coeffsarray = np.concatenate(( secondlevelcoeffs, thirdlevelcoeffs, fourthlevelcoeffs ))
+        else:
+            pass
+    
+    return coeffsarray
 
 
 def dwtanalysis(myim, wavelet, level, denoise):
@@ -187,7 +216,7 @@ import glob
 ''' Choose the desidered decomposition level.
     Choose wheter to denoise the image or not.
 '''
-level = 3
+level = 4
 denoise = 'no'
 
 ''' Getting images folder path to open the image
