@@ -17,7 +17,7 @@ def dwtcoefftoarray(myim, wavelet, level, denoise):
 
     coeffs = pywt.wavedec2(myim, wavelet, level=level)
     coeffsarray = pywt.ravel_coeffs(coeffs)
-    return coeffsarray
+    return coeffsarray[0]
 
 
 def dwtanalysis(myim, wavelet, level, denoise):
