@@ -215,9 +215,11 @@ import glob
 
 ''' Choose the desidered decomposition level.
     Choose wheter to denoise the image or not.
+    Choose how many and which wavelets to use to convert your images.
 '''
 level = 4
 denoise = 'no'
+wavelets = ['db2', 'sym2']
 
 ''' Getting images folder path to open the image
 '''
@@ -238,7 +240,7 @@ for k, folder in enumerate(['Train', 'Test']):
     zero_images_names = glob.glob(os.path.join(zero_images_path, '*.pgm'))
     one_images_names = glob.glob(os.path.join(one_images_path, '*.pgm'))
 
-    for j, wavelet_type in enumerate(['db2', 'sym2']): # Here you can choose which wavelets to use to analyze the images.
+    for j, wavelet_type in enumerate(wavelets):
         for i, image_path in enumerate(zero_images_names):
             im = Image.open(image_path)
             myim, mynewim = dwtanalysis(im, wavelet_type, level=level, denoise=denoise)
