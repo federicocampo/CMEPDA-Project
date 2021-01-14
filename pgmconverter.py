@@ -5,13 +5,13 @@ def convert_to_pgm(fname, dest_folder):
       it more universal.
 
       Parameters:
-      - fname = name of the image to convert
-      - dest_folder = folder path to which the image will be saved
+        - fname = name of the image to convert
+        - dest_folder = folder path to which the image will be saved
   '''
 
-  ''' If the desired folder to which save the new
-      images doesn't exist, here it's created.
-  ''' 
+  # If the desired folder to which save the new
+  # images doesn't exist, here it's created.
+  
   if not os.path.exists(dest_folder):
     os.makedirs(dest_folder)
     
@@ -25,17 +25,18 @@ def convert_to_pgm(fname, dest_folder):
 import os
 from PIL import Image
 
-general_path = r"C:\Users\feder\Desktop"
+general_path = os.path.join(os.environ['USERPROFILE'], 'Desktop')
+ 
+# Here I define the list of folders which contains all
+# the images in the .png format.
 
-''' Here I define the list of folders which contains all
-    the images in the .png format.
-'''
 folder_list = ['db2_3levels_nodenoise', 'db2_3levels_yesdenoise',
                 'sym2_3levels_nodenoise', 'sym2_3levels_yesdenoise',
                 'db5_4levels_nodenoise', 'db5_4levels_yesdenoise']
 
-''' For every folder in my list 
-'''
+
+# For every folder in my list 
+
 for i, folder in enumerate(folder_list):
     PATH = os.path.join(general_path, folder)
 
@@ -45,8 +46,8 @@ for i, folder in enumerate(folder_list):
             for fname in fnames:
                 abs_path = os.path.join(path, fname)
                 
-                ''' New images are saved in the same general folder but are now contained
-                    in the Train and Test folders.
-                '''
+                # New images are saved in the same general folder but are now contained
+                # in the Train and Test folders.
+                
                 dest_folder = path.replace('Train_png', 'Train').replace('Test_png', 'Test')
                 convert_to_pgm(abs_path, dest_folder)
