@@ -164,14 +164,15 @@ the original image prior to the DWT decomposition. The coefficients matrices obt
 the DWT are then masked keeping only those values which are greater than
 the standard deviation calculated over the matrix values. The image is then
 reconstructed using the new coefficients.</p>
-<p>Parameters:
-- myim = image opened with PIL.Image
-- wavelet = which wavelet to use
-- level = level of the wavelet decomposition
-- denoise = wheter to prior denoise the image or not, denoise</p>
-<blockquote>
-<div><p>should be set to “yes” or “no”</p>
-</div></blockquote>
+<dl class="simple">
+<dt>Parameters:</dt><dd><ul class="simple">
+<li><p>myim = image opened with PIL.Image</p></li>
+<li><p>wavelet = which wavelet to use</p></li>
+<li><p>level = level of the wavelet decomposition</p></li>
+<li><p>denoise = wheter to prior denoise the image or not, denoise should be set to “yes” or “no”</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -179,56 +180,14 @@ reconstructed using the new coefficients.</p>
 <code class="sig-prename descclassname">waveletconverter.</code><code class="sig-name descname">dwtcoefftoarray</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">myim</span></em>, <em class="sig-param"><span class="n">wavelet</span></em>, <em class="sig-param"><span class="n">level</span></em>, <em class="sig-param"><span class="n">denoise</span></em>, <em class="sig-param"><span class="n">partial</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/waveletconverter.html#dwtcoefftoarray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#waveletconverter.dwtcoefftoarray" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function collects all the coefficients of the DWT and converts them
 in a flat array which can be passed to the Deep Neural Network.</p>
-<p>Parameters:
-- myim = image opened with PIL.Image
-- wavelet = which wavelet to use
-- level = level of the wavelet decomposition
-- denoise = wheter to prior denoise the image or not, denoise</p>
-<blockquote>
-<div><p>should be set to “yes” or “no”</p>
-</div></blockquote>
-<ul class="simple">
-<li><dl class="simple">
-<dt>partial = True or False &lt;– let’s you choose wheter to take only the</dt><dd><p>second and third levels coeffiecients if level is 3, or the
-second, third and fourth levels coefficients if level is 4</p>
-</dd>
-</dl>
-</li>
+<dl class="simple">
+<dt>Parameters:</dt><dd><ul class="simple">
+<li><p>myim = image opened with PIL.Image</p></li>
+<li><p>wavelet = which wavelet to use</p></li>
+<li><p>level = level of the wavelet decomposition</p></li>
+<li><p>denoise = wheter to prior denoise the image or not, denoise should be set to “yes” or “no”</p></li>
+<li><p>partial = True or False &lt;– let’s you choose wheter to take only the second and third levels coeffiecients if level is 3, or the second, third and fourth levels coefficients if level is 4</p></li>
 </ul>
-</dd></dl>
-
-<dl class="py data">
-<dt id="waveletconverter.general_path">
-<code class="sig-prename descclassname">waveletconverter.</code><code class="sig-name descname">general_path</code><em class="property"> = 'C:\\Users\\feder\\Desktop\\Computational Methods for Experimental Physics and Data Analysis\\IMAGES\\Mammography_micro'</em><a class="headerlink" href="#waveletconverter.general_path" title="Permalink to this definition">¶</a></dt>
-<dd><p>Starting from the general_path folder, which contains 0 and 1 folders,
-these loops cycle every image contained in these folders in order to process
-them with the dwtanalysis() function. Then the images are saved in the desired folder.</p>
-</dd></dl>
-
-<dl class="py data">
-<dt id="waveletconverter.myim">
-<code class="sig-prename descclassname">waveletconverter.</code><code class="sig-name descname">myim</code><em class="property"> = &lt;PIL.PpmImagePlugin.PpmImageFile image mode=L size=60x60&gt;</em><a class="headerlink" href="#waveletconverter.myim" title="Permalink to this definition">¶</a></dt>
-<dd><p>Choose the path to which the 1 label images will be saved.
-Default: The images are saved on the Desktop in a folder which name describes
-the wavelet used, the decomposition level and if a denoise process has been applied.
-In this folder a “1” folder is created, containing all the new images.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>For Windows users</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py data">
-<dt id="waveletconverter.mynewim">
-<code class="sig-prename descclassname">waveletconverter.</code><code class="sig-name descname">mynewim</code><em class="property"> = &lt;PIL.Image.Image image mode=L size=60x60&gt;</em><a class="headerlink" href="#waveletconverter.mynewim" title="Permalink to this definition">¶</a></dt>
-<dd><p>Choose the path to which the 1 label images will be saved.
-Default: The images are saved on the Desktop in a folder which name describes
-the wavelet used, the decomposition level and if a denoise process has been applied.
-In this folder a “1” folder is created, containing all the new images.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>For Windows users</p>
 </dd>
 </dl>
 </dd></dl>
@@ -236,9 +195,9 @@ In this folder a “1” folder is created, containing all the new images.</p>
 <dl class="py function">
 <dt id="waveletconverter.savecomparison">
 <code class="sig-prename descclassname">waveletconverter.</code><code class="sig-name descname">savecomparison</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">myim</span></em>, <em class="sig-param"><span class="n">mynewim</span></em>, <em class="sig-param"><span class="n">save_path</span></em>, <em class="sig-param"><span class="n">title_of_image</span></em>, <em class="sig-param"><span class="n">name_of_image</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/waveletconverter.html#savecomparison"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#waveletconverter.savecomparison" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>This function saves an image showing the comparison between the original image and the</dt><dd><p>reconstructed one in which details are highly enhanced.</p>
-</dd>
+<dd><p>This function saves an image showing the comparison between the original image and the
+reconstructed one in which details are highly enhanced.</p>
+<dl class="simple">
 <dt>Parameters:</dt><dd><ul class="simple">
 <li><p>myim = the original image opened with PIL.Image</p></li>
 <li><p>mynewim = the image obtained with the DWT analysis</p></li>
@@ -248,12 +207,6 @@ In this folder a “1” folder is created, containing all the new images.</p>
 </ul>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py data">
-<dt id="waveletconverter.wavelets">
-<code class="sig-prename descclassname">waveletconverter.</code><code class="sig-name descname">wavelets</code><em class="property"> = ['db2', 'sym2']</em><a class="headerlink" href="#waveletconverter.wavelets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Getting images folder path to open the image</p>
 </dd></dl>
 
 </div>
