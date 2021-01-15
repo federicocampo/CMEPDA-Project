@@ -207,17 +207,18 @@ def savecomparison(myim, mynewim, save_path, title_of_image, name_of_image):
     plt.savefig(final_path, bbox_inches='tight')
 
 
-if __name__ == "__main__":
-    from PIL import Image
-    import pywt
-    from skimage.restoration import denoise_wavelet
-    from skimage import img_as_float
-    import matplotlib.pyplot as plt
-    import numpy as np
-    import os
-    import glob
-    import argparse
 
+from PIL import Image
+import pywt
+from skimage.restoration import denoise_wavelet
+from skimage import img_as_float
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+import glob
+import argparse
+
+if __name__ == "__main__":
     # Arguments
     parser = argparse.ArgumentParser(description="Tool to process images with wavelets")
     parser.add_argument('-path', help='You need to give me the path pointing to the folder containing CMEPDA-Project', type=str)
