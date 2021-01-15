@@ -10,6 +10,7 @@ def dwtcoefftoarray(myim, wavelet, level, denoise, partial=False):
         - denoise = wheter to prior denoise the image or not, denoise should be set to "yes" or "no"
         - partial = True or False <-- let's you choose wheter to take only the second and third levels coeffiecients if level is 3, or the second, third and fourth levels coefficients if level is 4
     '''
+    import pywt
     if denoise == 'yes':
         myimfl = img_as_float(myim)
         myim = denoise_wavelet(myimfl, method='BayesShrink', mode='soft', rescale_sigma='True')
@@ -64,6 +65,7 @@ def dwtanalysis(myim, wavelet, level, denoise):
         - level = level of the wavelet decomposition
         - denoise = wheter to prior denoise the image or not, denoise should be set to "yes" or "no" 
     '''
+    import pywt
     if denoise == 'yes':
         myimfl = img_as_float(myim)
         myim = denoise_wavelet(myimfl, method='BayesShrink', mode='soft', rescale_sigma='True')
@@ -208,7 +210,7 @@ def savecomparison(myim, mynewim, save_path, title_of_image, name_of_image):
 
 
 from PIL import Image
-import pywt
+
 from skimage.restoration import denoise_wavelet
 from skimage import img_as_float
 import matplotlib.pyplot as plt
