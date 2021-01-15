@@ -215,68 +215,63 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import glob
+import argparse
 
- 
-# Choose the desidered decomposition level.
-level = 3
-# Choose wheter to denoise the image or not.
-denoise = 'no'
-# Choose how many and which wavelets to use to convert your images.
-wavelets = ['db2', 'sym2']
+# Arguments
+parser = argparse.ArgumentParser(description="Tool to process images with wavelets")
+parser.add_argument('-path', help='You need to give me the path pointing to the folder containing CMEPDA-Project', type=str)
+parser.add_argument('-wavelet', help='Which Wavelet Family do you want to use?', type=str)
+parser.add_argument('-level', help='Which level of decomposition do you desire?', type=int, choices=[2,3,4,5])
+parser.add_argument('-denoise', help='Would you like to denoise your images before processing them?', type=str, choices=['yes','no'])
+parser.add_argument('-savepath', help='Where would you save the processed images?', type=str)
+args = parser.parse_args()
 
+cmepdapath = args.path
+level = args.level
+denoise = args.denoise
+wavelet = args.wavelet
+save_path = args.savepath
  
 # Getting images folder path to open the image
-desktop_path = os.path.join(os.environ['USERPROFILE'], 'Desktop')
-general_path = os.path.join(desktop_path, 'Computational Methods for Experimental Physics and Data Analysis', 'IMAGES', 'Mammography_micro')
+general_path = os.path.join(cmepdapath, 'CMEPDA-Project', 'Images')
 
-# Starting from the general_path folder, which contains 0 and 1 folders, 
-# these loops cycle every image contained in these folders in order to process
+# Starting from the general_path folder, which contains Train and Test folders, 
+# these loops cycle every image contained in 0 and 1 subfolders in order to process
 # them with the dwtanalysis() function. Then the images are saved in the desired folder.
 
-for k, folder in enumerate(['Train', 'Test']): 
+for folder in ['Train', 'Test']: 
     # 0 folder's images are those without microcalcifications.
-    # 1 folder's images are those containing microcalcifications.
-    
-    zero_images_path = os. path.join(general_path, folder, '0')
-    one_images_path = os. path.join(general_path, folder, '1')
+    # 1 folder's images are those containing microcalcifications.    
+    zero_images_path = os.path.join(general_path, folder, '0')
+    one_images_path = os.path.join(general_path, folder, '1')
 
     # Here I retrieve all the images in the .pgm format.
     zero_images_names = glob.glob(os.path.join(zero_images_path, '*.pgm'))
     one_images_names = glob.glob(os.path.join(one_images_path, '*.pgm'))
 
-    for j, wavelet_type in enumerate(wavelets):
-        for i, image_path in enumerate(zero_images_names):
-            im = Image.open(image_path)
-            myim, mynewim = dwtanalysis(im, wavelet_type, level=level, denoise=denoise)
-             
-            # For Windows users: Choose the path to which the 0 label images will be saved.
-            # Default: The images are saved on the Desktop in a folder which name describes
-            # the wavelet used, the decomposition level and if a denoise process has been applied.
-            # In this folder a "0" folder is created, containing all the new images.
+    
+    for i, image_path in enumerate(zero_images_names):
+        im = Image.open(image_path)
+        myim, mynewim = dwtanalysis(im, wavelet, level=level, denoise=denoise)
             
-            save_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', f'{wavelet_type}_{level}levels_{denoise}denoise', f'{folder}_png', '0')
-            if not os.path.exists(save_path):
-                os.makedirs(save_path)
-            final_path = os.path.join(save_path, f'{i}.png')
+        final_save_path = os.path.join(save_path, 'Processed Images', f'{wavelet}_{level}levels_{denoise}denoise', f'{folder}_png', '0')
+        if not os.path.exists(final_save_path):
+            os.makedirs(final_save_path)
+        final_path = os.path.join(final_save_path, f'{i}.png')
 
-            mynewim = mynewim.astype(np.uint8)
-            mynewim = Image.fromarray(mynewim)
-            mynewim.save(final_path)
+        mynewim = mynewim.astype(np.uint8)
+        mynewim = Image.fromarray(mynewim)
+        mynewim.save(final_path)
 
-        for i, image_path in enumerate(one_images_names):
-            im = Image.open(image_path)
-            myim, mynewim = dwtanalysis(im, wavelet_type, level=level, denoise=denoise)
+    for i, image_path in enumerate(one_images_names):
+        im = Image.open(image_path)
+        myim, mynewim = dwtanalysis(im, wavelet, level=level, denoise=denoise)
             
-            # For Windows users: Choose the path to which the 1 label images will be saved.
-            # Default: The images are saved on the Desktop in a folder which name describes
-            # the wavelet used, the decomposition level and if a denoise process has been applied.
-            # In this folder a "1" folder is created, containing all the new images.
-            
-            save_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', f'{wavelet_type}_{level}levels_{denoise}denoise', f'{folder}_png', '1')
-            if not os.path.exists(save_path):
-                os.makedirs(save_path)
-            final_path = os.path.join(save_path, f'{i}.png')
+        final_save_path = os.path.join(save_path, 'Processed Images', f'{wavelet}_{level}levels_{denoise}denoise', f'{folder}_png', '1')
+        if not os.path.exists(final_save_path):
+            os.makedirs(final_save_path)
+        final_path = os.path.join(final_save_path, f'{i}.png')
 
-            mynewim = mynewim.astype(np.uint8)
-            mynewim = Image.fromarray(mynewim)
-            mynewim.save(final_path)
+        mynewim = mynewim.astype(np.uint8)
+        mynewim = Image.fromarray(mynewim)
+        mynewim.save(final_path)
