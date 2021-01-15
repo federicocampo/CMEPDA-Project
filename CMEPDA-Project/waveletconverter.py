@@ -209,11 +209,11 @@ def savecomparison(myim, mynewim, save_path, title_of_image, name_of_image):
 
 
 from PIL import Image
-import pywt
 from skimage.restoration import denoise_wavelet
 from skimage import img_as_float
 import matplotlib.pyplot as plt
 import numpy as np
+import pywt
 import os
 import glob
 import argparse
