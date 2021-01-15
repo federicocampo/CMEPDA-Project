@@ -26,21 +26,22 @@ import os
 from PIL import Image
 import argparse
 
-# Arguments
-parser = argparse.ArgumentParser(description="Tool to convert .png images into .pgm images contained in the same folder")
-parser.add_argument('-path', help='You need to give me the path pointing to the folder containing Test_png and Train_png folders', type=str)
-args = parser.parse_args()
+if __name__ == "__main__":
+  # Arguments
+  parser = argparse.ArgumentParser(description="Tool to convert .png images into .pgm images contained in the same folder")
+  parser.add_argument('-path', help='You need to give me the path pointing to the folder containing Test_png and Train_png folders', type=str)
+  args = parser.parse_args()
 
-PATH = args.path
+  PATH = args.path
 
-# For Train_png and Test_png containing 0 and 1 labelled png images convert every image in pgm
-for data_path in [os.path.join(PATH, "Train_png"), os.path.join(PATH, "Test_png")]:
-    for path, folders, fnames in os.walk(data_path):
-        # Using convert_to_pgm function for every image
-        for fname in fnames:
-            abs_path = os.path.join(path, fname)
-                
-            # New images are saved in the same general folder but are now contained
-            # in the Train and Test folders instead of Train_png and Test_png.
-            dest_folder = path.replace('Train_png', 'Train').replace('Test_png', 'Test')
-            convert_to_pgm(abs_path, dest_folder)
+  # For Train_png and Test_png containing 0 and 1 labelled png images convert every image in pgm
+  for data_path in [os.path.join(PATH, "Train_png"), os.path.join(PATH, "Test_png")]:
+      for path, folders, fnames in os.walk(data_path):
+          # Using convert_to_pgm function for every image
+          for fname in fnames:
+              abs_path = os.path.join(path, fname)
+                  
+              # New images are saved in the same general folder but are now contained
+              # in the Train and Test folders instead of Train_png and Test_png.
+              dest_folder = path.replace('Train_png', 'Train').replace('Test_png', 'Test')
+              convert_to_pgm(abs_path, dest_folder)

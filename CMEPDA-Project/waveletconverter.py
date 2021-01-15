@@ -217,61 +217,62 @@ import os
 import glob
 import argparse
 
-# Arguments
-parser = argparse.ArgumentParser(description="Tool to process images with wavelets")
-parser.add_argument('-path', help='You need to give me the path pointing to the folder containing CMEPDA-Project', type=str)
-parser.add_argument('-wavelet', help='Which Wavelet Family do you want to use?', type=str)
-parser.add_argument('-level', help='Which level of decomposition do you desire?', type=int, choices=[2,3,4,5])
-parser.add_argument('-denoise', help='Would you like to denoise your images before processing them?', type=str, choices=['yes','no'])
-parser.add_argument('-savepath', help='Where would you save the processed images?', type=str)
-args = parser.parse_args()
+if __name__ == "__main__":
+    # Arguments
+    parser = argparse.ArgumentParser(description="Tool to process images with wavelets")
+    parser.add_argument('-path', help='You need to give me the path pointing to the folder containing CMEPDA-Project', type=str)
+    parser.add_argument('-wavelet', help='Which Wavelet Family do you want to use?', type=str)
+    parser.add_argument('-level', help='Which level of decomposition do you desire?', type=int, choices=[2,3,4,5])
+    parser.add_argument('-denoise', help='Would you like to denoise your images before processing them?', type=str, choices=['yes','no'])
+    parser.add_argument('-savepath', help='Where would you save the processed images?', type=str)
+    args = parser.parse_args()
 
-cmepdapath = args.path
-level = args.level
-denoise = args.denoise
-wavelet = args.wavelet
-save_path = args.savepath
- 
-# Getting images folder path to open the image
-general_path = os.path.join(cmepdapath, 'CMEPDA-Project', 'Images')
-
-# Starting from the general_path folder, which contains Train and Test folders, 
-# these loops cycle every image contained in 0 and 1 subfolders in order to process
-# them with the dwtanalysis() function. Then the images are saved in the desired folder.
-
-for folder in ['Train', 'Test']: 
-    # 0 folder's images are those without microcalcifications.
-    # 1 folder's images are those containing microcalcifications.    
-    zero_images_path = os.path.join(general_path, folder, '0')
-    one_images_path = os.path.join(general_path, folder, '1')
-
-    # Here I retrieve all the images in the .pgm format.
-    zero_images_names = glob.glob(os.path.join(zero_images_path, '*.pgm'))
-    one_images_names = glob.glob(os.path.join(one_images_path, '*.pgm'))
-
+    cmepdapath = args.path
+    level = args.level
+    denoise = args.denoise
+    wavelet = args.wavelet
+    save_path = args.savepath
     
-    for i, image_path in enumerate(zero_images_names):
-        im = Image.open(image_path)
-        myim, mynewim = dwtanalysis(im, wavelet, level=level, denoise=denoise)
-            
-        final_save_path = os.path.join(save_path, 'Processed Images', f'{wavelet}_{level}levels_{denoise}denoise', f'{folder}_png', '0')
-        if not os.path.exists(final_save_path):
-            os.makedirs(final_save_path)
-        final_path = os.path.join(final_save_path, f'{i}.png')
+    # Getting images folder path to open the image
+    general_path = os.path.join(cmepdapath, 'CMEPDA-Project', 'Images')
 
-        mynewim = mynewim.astype(np.uint8)
-        mynewim = Image.fromarray(mynewim)
-        mynewim.save(final_path)
+    # Starting from the general_path folder, which contains Train and Test folders, 
+    # these loops cycle every image contained in 0 and 1 subfolders in order to process
+    # them with the dwtanalysis() function. Then the images are saved in the desired folder.
 
-    for i, image_path in enumerate(one_images_names):
-        im = Image.open(image_path)
-        myim, mynewim = dwtanalysis(im, wavelet, level=level, denoise=denoise)
-            
-        final_save_path = os.path.join(save_path, 'Processed Images', f'{wavelet}_{level}levels_{denoise}denoise', f'{folder}_png', '1')
-        if not os.path.exists(final_save_path):
-            os.makedirs(final_save_path)
-        final_path = os.path.join(final_save_path, f'{i}.png')
+    for folder in ['Train', 'Test']: 
+        # 0 folder's images are those without microcalcifications.
+        # 1 folder's images are those containing microcalcifications.    
+        zero_images_path = os.path.join(general_path, folder, '0')
+        one_images_path = os.path.join(general_path, folder, '1')
 
-        mynewim = mynewim.astype(np.uint8)
-        mynewim = Image.fromarray(mynewim)
-        mynewim.save(final_path)
+        # Here I retrieve all the images in the .pgm format.
+        zero_images_names = glob.glob(os.path.join(zero_images_path, '*.pgm'))
+        one_images_names = glob.glob(os.path.join(one_images_path, '*.pgm'))
+
+        
+        for i, image_path in enumerate(zero_images_names):
+            im = Image.open(image_path)
+            myim, mynewim = dwtanalysis(im, wavelet, level=level, denoise=denoise)
+                
+            final_save_path = os.path.join(save_path, 'Processed Images', f'{wavelet}_{level}levels_{denoise}denoise', f'{folder}_png', '0')
+            if not os.path.exists(final_save_path):
+                os.makedirs(final_save_path)
+            final_path = os.path.join(final_save_path, f'{i}.png')
+
+            mynewim = mynewim.astype(np.uint8)
+            mynewim = Image.fromarray(mynewim)
+            mynewim.save(final_path)
+
+        for i, image_path in enumerate(one_images_names):
+            im = Image.open(image_path)
+            myim, mynewim = dwtanalysis(im, wavelet, level=level, denoise=denoise)
+                
+            final_save_path = os.path.join(save_path, 'Processed Images', f'{wavelet}_{level}levels_{denoise}denoise', f'{folder}_png', '1')
+            if not os.path.exists(final_save_path):
+                os.makedirs(final_save_path)
+            final_path = os.path.join(final_save_path, f'{i}.png')
+
+            mynewim = mynewim.astype(np.uint8)
+            mynewim = Image.fromarray(mynewim)
+            mynewim.save(final_path)
