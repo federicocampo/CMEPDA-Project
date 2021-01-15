@@ -10,6 +10,7 @@ Welcome to CMEPDA-Project's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   source/modules
    source/waveletconverter
    source/pgmconverter
 
