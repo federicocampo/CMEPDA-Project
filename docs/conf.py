@@ -32,8 +32,8 @@ release = '1.0.0'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.viewcode',
+    # 'sphinx.ext.intersphinx',
+    # 'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
 ]
 
@@ -62,4 +62,4 @@ html_theme = 'sphinx_rtd_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = []
 
-autodoc_mock_imports = ['skimage','matplotlib','numpy','pywt']
+# autodoc_mock_imports = ['skimage','matplotlib','numpy','pywt']
